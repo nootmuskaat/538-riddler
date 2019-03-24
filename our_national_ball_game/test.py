@@ -38,13 +38,59 @@ class InningTest(unittest.TestCase):
 class BasesTest(unittest.TestCase):
     def test_clear_the_bases(self):
         from ball_game import Bases
-        status = Bases()
-        status.on_first = True
-        status.on_second = True
+        status = Bases.from_tuple(True, True, False)
         self.assertFalse(status.on_third)
         status.clear()
         self.assertFalse(status.on_second)
         self.assertFalse(status.on_first)
+
+    def test_scores_from_first_on_triple(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(True, False, False)
+        scored = bases.score_from(1)
+        self.assertEqual(scored, 1)
+        self.assertFalse(bases.on_first)
+
+    def test_scores_from_second_on_double(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(True, True, False)
+        scored = bases.score_from(2)
+        self.assertEqual(scored, 1)
+        self.assertFalse(bases.on_second)  # doesn't consider hitter
+
+    def test_bases_load_all_score_on_triple(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(True, True, True)
+        scored = bases.score_from(1)
+        self.assertEqual(scored, 3)
+
+    def test_scores_from_third_on_single(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(True, False, True)
+        scored = bases.score_from(3)
+        self.assertEqual(scored, 1)
+
+    def test_score_on_walk_with_bases_loaded(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(True, True, True)
+        scores = bases.runners_move(1)
+        self.assertEqual(1, scores)
+
+    def test_fill_the_bases(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(True, True, False)
+        scores = bases.runners_move(1)
+        self.assertEqual(0, scores)
+        full_bases = (True, True, True)
+        self.assertEqual(full_bases, bases.as_tuple)
+
+    def test_no_advance_from_third_on_walk(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(False, False, True)
+        scores = bases.runners_move(1)
+        self.assertEqual(0, scores)
+        expected = (True, False, True)
+        self.assertEqual(expected, bases.as_tuple)
 
 
 if __name__ == "__main__":

@@ -52,6 +52,7 @@ class Inning(object):
 
     def add_outs(self, outs_to_add: int) -> None:
         self.outs += outs_to_add
+        self.new_batter()
         if self.outs >= self.total_outs:
             self.bases.clear()
             if self.bottom:
@@ -68,8 +69,6 @@ class Inning(object):
             self.runs[0] += runs_scored
         elif self.bottom:
             self.runs[1] += runs_scored
-        else:
-            raise PermissionError("Innings that are over can't be modified")
 
 
 class Bases(object):
@@ -87,3 +86,52 @@ class Bases(object):
     def as_tuple(self):
         return self.on_first, self.on_second, self.on_third
 
+    @classmethod
+    def from_tuple(cls, on_first, on_second, on_third):
+        """Useful classmethod for testing"""
+        self = cls()
+        self.on_first = on_first
+        self.on_second = on_second
+        self.on_third = on_third
+        return self
+
+    def score_from(self, base: int) -> int:
+        """
+        Base from which any runners might score
+        Args:
+            base: 1 == score from first, etc
+        Returns:
+            number of runs scored
+        """
+        runs = 0
+        if base <= 3 and self.on_third:
+            runs += 1
+            self.on_third = False
+        if base <= 2 and self.on_second:
+            runs += 1
+            self.on_second = False
+        if base <= 1 and self.on_first:
+            runs += 1
+            self.on_first = False
+        return runs
+
+    def runners_move(self, number_of_bases: int) -> int:
+        """Advance runners along the bases
+        Args:
+            number_of_bases: how many bases they advance
+        Returns:
+            runs scored - this will be 0 unless a player walks with bases loaded
+        """
+        batter = True
+        scored = 0
+        while number_of_bases:
+            if batter:
+                if self.on_first:
+                    if self.on_second:
+                        if self.on_third:
+                            scored += 1
+                        self.on_third = True
+                    self.on_second = True
+                self.on_first = True
+            number_of_bases -= 1
+        return scored
