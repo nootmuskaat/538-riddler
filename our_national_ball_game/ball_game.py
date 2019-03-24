@@ -25,16 +25,18 @@ class Die(int):
 
 
 class Inning(object):
-    def __init__(self):
+    def __init__(self) -> None:
         self.outs = 0
         self.runs = [0, 0]
         self.over = False
         self.top = True
         self.bottom = False
+        self.bases = Bases()
 
     def add_outs(self, outs_to_add: int) -> None:
         self.outs += outs_to_add
         if self.outs >= 3:
+            self.bases.clear()
             if self.bottom:
                 self.over = True
                 self.bottom = False
@@ -51,3 +53,19 @@ class Inning(object):
             self.runs[1] += runs_scored
         else:
             raise PermissionError("Innings that are over can't be modified")
+
+
+class Bases(object):
+    """The current state of the bases"""
+    def __init__(self) -> None:
+        self.on_first = False
+        self.on_second = False
+        self.on_third = False
+
+    def clear(self) -> None:
+        """clear the bases"""
+        self.__init__()
+
+    @property
+    def as_tuple(self):
+        return self.on_first, self.on_second, self.on_third

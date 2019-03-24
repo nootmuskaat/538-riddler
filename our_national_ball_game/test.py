@@ -35,5 +35,17 @@ class InningTest(unittest.TestCase):
         self.assertEqual(inning.runs, (4, 2))
 
 
+class BasesTest(unittest.TestCase):
+    def test_clear_the_bases(self):
+        from ball_game import Bases
+        status = Bases()
+        status.on_first = True
+        status.on_second = True
+        self.assertFalse(status.on_third)
+        status.clear()
+        self.assertFalse(status.on_second)
+        self.assertFalse(status.on_first)
+
+
 if __name__ == "__main__":
     unittest.main()
