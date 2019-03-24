@@ -29,7 +29,7 @@ class InningTest(unittest.TestCase):
         self.assertFalse(inning.top)
         self.assertTrue(inning.bottom)
         self.assertEqual(inning.outs, 0)
-        inning.add_runs(2)  # 4 -2
+        inning.add_runs(2)  # 4 - 2
         inning.add_outs(3)
         self.assertTrue(inning.over)
         self.assertEqual(inning.runs, (4, 2))
