@@ -73,13 +73,13 @@ class BasesTest(unittest.TestCase):
     def test_score_on_walk_with_bases_loaded(self):
         from ball_game import Bases
         bases = Bases.from_tuple(True, True, True)
-        scores = bases.runners_move(1)
+        scores = bases.runners_advance(1)
         self.assertEqual(1, scores)
 
     def test_fill_the_bases(self):
         from ball_game import Bases
         bases = Bases.from_tuple(True, True, False)
-        scores = bases.runners_move(1)
+        scores = bases.runners_advance(1)
         self.assertEqual(0, scores)
         full_bases = (True, True, True)
         self.assertEqual(full_bases, bases.as_tuple)
@@ -87,11 +87,26 @@ class BasesTest(unittest.TestCase):
     def test_no_advance_from_third_on_walk(self):
         from ball_game import Bases
         bases = Bases.from_tuple(False, False, True)
-        scores = bases.runners_move(1)
+        scores = bases.runners_advance(1)
         self.assertEqual(0, scores)
         expected = (True, False, True)
         self.assertEqual(expected, bases.as_tuple)
 
+    def test_runners_advance_on_double(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(True, False, False)
+        scores = bases.runners_advance(2)
+        self.assertEqual(0, scores)
+        expected = (False, True, True)
+        self.assertEqual(expected, bases.as_tuple)
+
+    def test_score_on_home_run(self):
+        from ball_game import Bases
+        bases = Bases.from_tuple(False, False, False)
+        scores = bases.runners_advance(4)  # aka a home run
+        self.assertEqual(1, scores)
+        expected = (False, False, False)
+        self.assertEqual(expected, bases.as_tuple)
 
 if __name__ == "__main__":
     unittest.main()

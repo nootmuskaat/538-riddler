@@ -115,23 +115,34 @@ class Bases(object):
             self.on_first = False
         return runs
 
-    def runners_move(self, number_of_bases: int) -> int:
-        """Advance runners along the bases
+    def runners_advance(self, number_of_bases: int) -> int:
+        """
+        Advance runners along the bases
         Args:
             number_of_bases: how many bases they advance
         Returns:
-            runs scored - this will be 0 unless a player walks with bases loaded
+            runs scored: this will be 0 unless a player walks with bases loaded
+                    or a home run is hit
         """
-        batter = True
+        runner_moves = lambda x, y: (x and y, x or y)
+        tuple_and = lambda x, y: [a and b for a, b in zip(x, y)]
+
+        if number_of_bases not in range(1, 5):
+            raise ValueError(f"Runners can advance between 1 and 4 bases only")
+
+        forced = True
         scored = 0
+        bases_to_clear = number_of_bases - 1
         while number_of_bases:
-            if batter:
-                if self.on_first:
-                    if self.on_second:
-                        if self.on_third:
-                            scored += 1
-                        self.on_third = True
-                    self.on_second = True
-                self.on_first = True
+            forced, self.on_first = runner_moves(forced, self.on_first)
+            forced, self.on_second = runner_moves(forced, self.on_second)
+            forced, self.on_third = runner_moves(forced, self.on_third)
+            if forced:
+                scored += 1
+            forced = True
             number_of_bases -= 1
+        current = self.as_tuple
+        to_leave = ([False] * bases_to_clear + [True] * 3)[:3]
+        new_state = tuple_and(current, to_leave)
+        self.on_first, self.on_second, self.on_third = new_state
         return scored
