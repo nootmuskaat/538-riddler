@@ -124,8 +124,11 @@ class Bases(object):
             runs scored: this will be 0 unless a player walks with bases loaded
                     or a home run is hit
         """
-        runner_moves = lambda x, y: (x and y, x or y)
-        tuple_and = lambda x, y: [a and b for a, b in zip(x, y)]
+        def runner_moves(x, y):
+            return x and y, x or y
+
+        def and_tuples(x, y):
+            return tuple([a and b for a, b in zip(x, y)])
 
         if number_of_bases not in range(1, 5):
             raise ValueError(f"Runners can advance between 1 and 4 bases only")
@@ -143,6 +146,6 @@ class Bases(object):
             number_of_bases -= 1
         current = self.as_tuple
         to_leave = ([False] * bases_to_clear + [True] * 3)[:3]
-        new_state = tuple_and(current, to_leave)
+        new_state = and_tuples(current, to_leave)
         self.on_first, self.on_second, self.on_third = new_state
         return scored
