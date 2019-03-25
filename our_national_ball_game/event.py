@@ -34,23 +34,23 @@ STRIKE = (
         )
 
 FOUL_OUT = (
-        ("add_outs", 1),
+        ("add_out",),
         )
 
 OUT_AT_1ST = (
-        ("add_outs", 1),
+        ("add_out",),
         ("score_from", 3),
         ("runners_advance", 1),
         ("clear_lowest",),
         )
 
 FLY_OUT = (
-        ("add_outs", 1),
+        ("add_out",),
         ("score_from", 3),
         )
 
 DOUBLE_PLAY = (
-        ("add_outs", 1),
+        ("add_out",),
         ("clear_lowest",),
         )
 

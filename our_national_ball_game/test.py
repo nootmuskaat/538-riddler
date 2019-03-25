@@ -22,15 +22,17 @@ class InningTest(unittest.TestCase):
         from ball_game import Inning
         inning = Inning()
         inning.add_runs(1)  # 1 - 0
-        inning.add_outs(2)
+        for _ in range(2):
+            inning.add_out()
         inning.add_runs(3)  # 4 - 0
         self.assertTrue(inning.top)
-        inning.add_outs(2)
+        inning.add_out()
         self.assertFalse(inning.top)
         self.assertTrue(inning.bottom)
         self.assertEqual(inning.outs, 0)
         inning.add_runs(2)  # 4 - 2
-        inning.add_outs(3)
+        for _ in range(3):
+            inning.add_out()
         self.assertTrue(inning.over)
         self.assertEqual(inning.runs, (4, 2))
 

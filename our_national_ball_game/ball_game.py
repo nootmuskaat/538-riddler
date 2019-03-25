@@ -44,16 +44,21 @@ class Inning(object):
         self.new_batter()
         self.outs = 0
 
-    def add_strike(self) -> None:
+    def add_strike(self) -> bool:
         self.strikes += 1
         if self.strikes == self.total_strikes:
-            self.add_outs(1)
-            self.new_batter()
+            return self.add_out()
+        return False
 
-    def add_outs(self, outs_to_add: int) -> None:
-        self.outs += outs_to_add
+    def add_out(self) -> bool:
+        """
+        Increment the out counter
+        Returns:
+            True if the out is the last out of the half inning
+        """
+        self.outs += 1
         self.new_batter()
-        if self.outs >= self.total_outs:
+        if self.outs == self.total_outs:
             self.bases.clear()
             if self.bottom:
                 self.over = True
@@ -63,6 +68,8 @@ class Inning(object):
                 self.new_half_inning()
                 self.top = False
                 self.bottom = True
+            return True
+        return False
 
     def add_runs(self, runs_scored: int) -> None:
         if self.top:
