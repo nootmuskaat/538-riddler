@@ -36,6 +36,20 @@ class InningTest(unittest.TestCase):
         self.assertTrue(inning.over)
         self.assertEqual(inning.runs, (4, 2))
 
+    def test_calling_bases_methods_from_inning(self):
+        from ball_game import Inning
+        inning = Inning()
+        inning.add_strike()
+        inning.runners_advance(3)  # a triple
+        self.assertEqual(0, inning.strikes)
+        self.assertTrue(any(inning.bases.as_tuple))
+        inning.add_strike()
+        inning.add_strike()
+        inning.score_from(2)  # an RBI single
+        inning.runners_advance(1)
+        self.assertEqual(1, inning.runs[0])
+        self.assertTrue(inning.bases.on_first)
+
 
 class BasesTest(unittest.TestCase):
     def test_clear_the_bases(self):

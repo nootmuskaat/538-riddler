@@ -77,6 +77,16 @@ class Inning(object):
         elif self.bottom:
             self.runs[1] += runs_scored
 
+    def score_from(self, base: int) -> None:
+        runs = self.bases.score_from(base)
+        self.add_runs(runs)
+        self.new_batter()
+
+    def runners_advance(self, number_of_bases: int) -> None:
+        runs = self.bases.runners_advance(number_of_bases)
+        self.add_runs(runs)
+        self.new_batter()
+
 
 class Bases(object):
     """The current state of the bases"""
