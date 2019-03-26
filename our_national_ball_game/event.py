@@ -41,7 +41,7 @@ OUT_AT_1ST = (
         ("add_out",),
         ("score_from", 3),
         ("runners_advance", 1),
-        ("clear_lowest",),
+        ("clear_lowest_runner",),
         )
 
 FLY_OUT = (
@@ -51,7 +51,7 @@ FLY_OUT = (
 
 DOUBLE_PLAY = (
         ("add_out",),
-        ("clear_lowest",),
+        ("turn_double_play",),
         )
 
 EVENT_TABLE = {

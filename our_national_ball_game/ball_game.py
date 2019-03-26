@@ -87,6 +87,13 @@ class Inning(object):
         self.add_runs(runs)
         self.new_batter()
 
+    def clear_lowest_runner(self) -> None:
+        self.bases.clear_lowest_runner()
+
+    def turn_double_play(self) -> None:
+        if self.bases.clear_lowest_runner():
+            self.add_out()
+
 
 class Bases(object):
     """The current state of the bases"""
@@ -166,3 +173,14 @@ class Bases(object):
         new_state = and_tuples(current, to_leave)
         self.on_first, self.on_second, self.on_third = new_state
         return scored
+
+    def clear_lowest_runner(self) -> bool:
+        if not any(self.as_tuple):
+            return False
+        if self.on_first:
+            self.on_first = False
+        elif self.on_second:
+            self.on_second = False
+        else:
+            self.on_third = False
+        return True
