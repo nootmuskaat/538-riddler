@@ -3,41 +3,53 @@ Baseball events
 """
 
 SINGLE = (
+        ("log", "And the hit's good for a single"),
         ("score_from", 2),
         ("runners_advance", 1),
         )
 
 DOUBLE = (
+        ("log", "And that'll be good for a double"),
         ("score_from", 2),
         ("runners_advance", 2),
         )
 
 TRIPLE = (
+        ("log", "And he turns it into a triple!"),
         ("score_from", 1),
         ("runners_advance", 3),
         )
 
 HOME_RUN = (
+        ("log", "it's going... going... gone!"),
         ("score_from", 1),
         ("runners_advance", 4),
         )
 
-BASE_ON_ERROR = SINGLE  # The task description makes no mention of counting
-                        # hits or errors
+# The task description makes no mention of counting hits or errors
+BASE_ON_ERROR = (
+        ("log", "And that'll be an error"),
+        ("score_from", 3),
+        ("runners_advance", 1),
+        )
 
 BASE_ON_BALLS = (
+        ("log", "And he walked him..."),
         ("runners_advance", 1),
         )
 
 STRIKE = (
+        ("log", "that'll be a strike"),
         ("add_strike",),
         )
 
 FOUL_OUT = (
+        ("log", "The catchers under it... and he's out"),
         ("add_out",),
         )
 
 OUT_AT_1ST = (
+        ("log", "And they'll throw him out at first"),
         ("add_out",),
         ("score_from", 3),
         ("runners_advance", 1),
@@ -45,11 +57,13 @@ OUT_AT_1ST = (
         )
 
 FLY_OUT = (
+        ("log", "The outfielder's under it. Out"),
         ("add_out",),
         ("score_from", 3),
         )
 
 DOUBLE_PLAY = (
+        ("log", "they've got him at first..."),
         ("add_out",),
         ("turn_double_play",),
         )

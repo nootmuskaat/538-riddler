@@ -1,4 +1,9 @@
+import logging as log
 import random
+import sys
+from typing import Any, List, Tuple
+
+import event
 
 
 class Die(int):
@@ -37,10 +42,18 @@ class Inning(object):
         self.bottom = False
         self.bases = Bases()
 
+    def status(self) -> str:
+        return f"{self.runs} | {self.strikes} strikes, {self.outs} outs, {self.bases}"
+
+    @staticmethod
+    def log(text: str) -> None:
+        log.info(text)
+
     def new_batter(self) -> None:
         self.strikes = 0
 
     def new_half_inning(self) -> None:
+        self.log("That takes us to the bottom of the inning")
         self.new_batter()
         self.outs = 0
 
@@ -72,6 +85,8 @@ class Inning(object):
         return False
 
     def add_runs(self, runs_scored: int) -> None:
+        if runs_scored:
+            self.log(f"And {runs_scored} runs score!")
         if self.top:
             self.runs[0] += runs_scored
         elif self.bottom:
@@ -92,6 +107,7 @@ class Inning(object):
 
     def turn_double_play(self) -> None:
         if self.bases.clear_lowest_runner():
+            self.log("And they turned the double play!")
             self.add_out()
 
 
