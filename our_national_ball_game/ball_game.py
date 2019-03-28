@@ -110,6 +110,12 @@ class Inning(object):
             self.log("And they turned the double play!")
             self.add_out()
 
+    def run_events(self, events: List[Tuple[str, Any]]) -> None:
+        for method, *args in events:
+            over = getattr(self, method)(*args)
+            if over:
+                break
+
 
 class Bases(object):
     """The current state of the bases"""
@@ -217,3 +223,48 @@ class Bases(object):
         else:
             self.on_third = False
         return True
+
+
+def main():
+    log.basicConfig(level=log.WARNING, format="%(message)s", stream=sys.stdout)
+    top_scores = []
+    bottom_scores = []
+    played = []
+    for _ in range(8):
+        inning = Inning()
+        inning.runs = [sum(top_scores), sum(bottom_scores)]
+        while not inning.over:
+            roll = Die.roll_multiple(2)
+            steps = event.EVENT_TABLE[roll]
+            inning.run_events(steps)
+            log.info(inning.status())
+        top_scores.append(inning.runs[0] - sum(top_scores))
+        bottom_scores.append(inning.runs[1] - sum(bottom_scores))
+        played.append(inning)
+        log.info(f"That's the end of inning #{len(played)}")
+    # don't play the bottom of the 9th if the home team is winning
+    inning = Inning()
+    inning.runs = [sum(top_scores), sum(bottom_scores)]
+    while not inning.bottom:
+        roll = Die.roll_multiple(2)
+        steps = event.EVENT_TABLE[roll]
+        inning.run_events(steps)
+        log.info(inning.status())
+    top_scores.append(inning.runs[0] - sum(top_scores))
+    if sum(bottom_scores) > sum(top_scores):
+        bottom_scores.append(0)
+    else:
+        while not inning.over and sum(bottom_scores) <= sum(top_scores) :
+            roll = Die.roll_multiple(2)
+            steps = event.EVENT_TABLE[roll]
+            inning.run_events(steps)
+            log.info(inning.status())
+        bottom_scores.append(inning.runs[1] - sum(bottom_scores))
+        log.info("And that'll do it, folks")
+
+    log.warning(f"{' '.join([str(i) for i in top_scores])} | {sum(top_scores)}")
+    log.warning(f"{' '.join([str(i) for i in bottom_scores])} | {sum(bottom_scores)}")
+
+
+if __name__ == "__main__":
+    main()
