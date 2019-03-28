@@ -102,6 +102,23 @@ class Bases(object):
         self.on_second = False
         self.on_third = False
 
+    def __str__(self):
+        if all(self.as_tuple):
+            return "Bases loaded"
+        elif not any(self.as_tuple):
+            return "Bases empty"
+        occupied = []
+        if self.on_first:
+            occupied.append("first")
+        if self.on_second:
+            occupied.append("second")
+        if self.on_third:
+            occupied.append("third")
+        if len(occupied) == 1:
+            return f"Runner on {occupied[0]}"
+        else:
+            return f"Runners on {occupied[0]} and {occupied[1]}"
+
     def clear(self) -> None:
         """clear the bases"""
         self.__init__()
