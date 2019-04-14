@@ -1,0 +1,11 @@
+You purchase a new clock but are dismayed to realize that both of its hands are
+identical. At first, it seems it's going to be impossible to tell the time
+because you don't know which hand is for the minutes and which is for the hours.
+
+However, you realize you don't need to know which is which for every time - for
+example, when it's 12:30, the minute hand will be exactly on the 6 and the hour
+hand will be halfway between the 12 and the 1. It can't be the other way around
+because if the hour hand were exactly on 6, the minute hand would have to
+exactly on 12, which it's not. So you know what time it is.
+
+How many times during the day will you not be able to tell the time?
